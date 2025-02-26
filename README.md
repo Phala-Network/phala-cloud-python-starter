@@ -49,13 +49,13 @@ By default, the FastAPI development server will listen on port 8000. Open http:/
 
 ## Build
 
-You need build the image and push to DockerHub for deployment. followinng doc is propose for public registry via DockerHub.
+You need to build the image and push it to DockerHub for deployment. The following instructions are for publishing to a public registry via DockerHub:
 
 ```shell
 sudo docker build . -t leechael/phala-cloud-python-starter
-sudo docker push
+sudo docker push leechael/phala-cloud-python-starter
 ```
 
 ## Deploy
 
-You can copy and paste the `docker-compose.yml` file in this repo to see the example up and run.
+You can copy and paste the `docker-compose.yml` file from this repo to see the example up and running.
