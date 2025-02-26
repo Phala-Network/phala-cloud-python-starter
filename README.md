@@ -15,7 +15,8 @@ Next, let's initialize the development environment with venv & pip:
 ```shell
 python -m venv venv
 source venv/bin/activate
-python -m pip install -r requirements.txt 
+python -m pip install -r requirements.txt
+cp env.example .env
 ```
 
 We also need to download the DStack simulator:
@@ -48,5 +49,13 @@ By default, the FastAPI development server will listen on port 8000. Open http:/
 
 ## Build
 
+You need build the image and push to DockerHub for deployment. followinng doc is propose for public registry via DockerHub.
+
+```shell
+sudo docker build . -t leechael/phala-cloud-python-starter
+sudo docker push
+```
 
 ## Deploy
+
+You can copy and paste the `docker-compose.yml` file in this repo to see the example up and run.
