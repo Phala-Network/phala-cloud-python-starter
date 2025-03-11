@@ -2,7 +2,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from fastapi import FastAPI, JSONResponse
+from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 from dstack_sdk import AsyncTappdClient
 from dstack_sdk.ethereum import to_account
 from dstack_sdk.solana import to_keypair
