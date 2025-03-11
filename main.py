@@ -14,7 +14,7 @@ app = FastAPI()
 async def get_info():
     client = AsyncTappdClient()
     info = await client.info()
-    return JSONResponse(content=info)
+    return JSONResponse(content=info.model_dump())
 
 @app.get("/tdx_quote")
 async def tdx_quote():
