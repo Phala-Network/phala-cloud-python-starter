@@ -13,7 +13,7 @@ ckzg==2.0.1
 click==8.1.8
 cytoolz==1.0.1
 dnspython==2.7.0
-dstack-sdk==0.2.0
+dstack-sdk==0.2.1
 email_validator==2.2.0
 eth-account==0.13.5
 eth-hash==0.7.1

@@ -5,8 +5,8 @@ load_dotenv()
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from dstack_sdk import AsyncTappdClient
-from dstack_sdk.ethereum import to_account
-from dstack_sdk.solana import to_keypair
+from dstack_sdk.ethereum import to_account_secure
+from dstack_sdk.solana import to_keypair_secure
 
 app = FastAPI()
 
@@ -32,12 +32,12 @@ async def derive_key():
 async def eth_account():
     client = AsyncTappdClient()
     result = await client.derive_key('test')
-    account = to_account(result)
+    account = to_account_secure(result)
     return { 'address': account.address }
 
 @app.get('/sol_account')
 async def sol_account():
     client = AsyncTappdClient()
     result = await client.derive_key('test')
-    keypair = to_keypair(result)
+    keypair = to_keypair_secure(result)
     return { 'address': str(keypair.pubkey()) }
