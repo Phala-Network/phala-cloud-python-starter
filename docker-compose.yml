@@ -1,6 +1,6 @@
 services:
   app:
-    image: ghcr.io/phala-network/phala-cloud-python-starter:latest
+    image: ghcr.io/phala-network/phala-cloud-python-starter:v0.0.1
     container_name: app
     ports:
       - "8000:8000"
