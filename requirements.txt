@@ -1,6 +1,6 @@
 # Direct dependencies only — let pip resolve transitive packages.
 # Pin dstack-sdk exactly to the beta we want to exercise; bump as needed.
-dstack-sdk[ethereum,solana]==0.5.4b1
+dstack-sdk[ethereum,solana]==0.5.4
 
 # Web server
 fastapi>=0.115,<0.120
