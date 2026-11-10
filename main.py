@@ -2,7 +2,7 @@
 
 Every endpoint maps to one capability on the dstack guest-agent socket
 (/var/run/dstack.sock). The server itself is plain FastAPI; the goal is to
-show, in one file, the full surface of dstack-sdk 0.5.4b1 so you can
+show, in one file, the full surface of dstack-sdk 0.5.4 so you can
 copy/paste pieces into your own app.
 """
 
@@ -31,7 +31,7 @@ from fastapi import HTTPException  # noqa: E402
 from pydantic import BaseModel  # noqa: E402
 from pydantic import Field  # noqa: E402
 
-SDK_VERSION = "0.5.4b1"
+SDK_VERSION = "0.5.4"
 app = FastAPI(
     title="Phala Cloud Python starter",
     description=(
