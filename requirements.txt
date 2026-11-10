@@ -1,10 +1,10 @@
 # Direct dependencies only — let pip resolve transitive packages.
-# Pin dstack-sdk exactly to the beta we want to exercise; bump as needed.
+# Pin dstack-sdk exactly to the release we want to exercise; bump as needed.
 dstack-sdk[ethereum,solana]==0.5.4
 
 # Web server
-fastapi>=0.115,<0.120
-uvicorn[standard]>=0.34,<0.40
+fastapi>=0.162,<0.163
+uvicorn[standard]>=0.54,<0.55
 
 # Config loading
-python-dotenv>=1.0,<2
+python-dotenv>=1.2,<2

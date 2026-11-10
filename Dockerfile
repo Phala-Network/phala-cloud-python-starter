@@ -1,4 +1,6 @@
-FROM python:3.12-slim
+# Debian Trixie (not Alpine). 3.12.16 includes the Oct 2026 CPython
+# security fixes (CVE-2026-115557, CVE-2026-114583, bundled Expat 2.9.0).
+FROM python:3.12.16-slim-trixie
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \

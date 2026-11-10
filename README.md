@@ -2,7 +2,7 @@
 
 [![](https://cloud.phala.network/deploy-button.svg)](https://cloud.phala.network/templates/python-starter)
 
-FastAPI reference app that exercises every capability on `dstack-sdk` 0.5.4b1. Use it as a copy/paste source for your own dstack-deployed service. The container is built and published to GHCR automatically.
+FastAPI reference app that exercises every capability on `dstack-sdk` 0.5.4. Use it as a copy/paste source for your own dstack-deployed service. The container is built and published to GHCR automatically.
 
 ## Endpoint Map
 
