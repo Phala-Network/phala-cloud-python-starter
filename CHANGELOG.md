@@ -1,3 +1,9 @@
+## v0.1.0 (2026-11-10)
+
+- Merge pull request #4 from Phala-Network/fix/hash-quote-report-data (f2d29ec)
+- fix: hash quote report_data under the app-data tag (19033c3)
+- chore(release): update docker-compose.yml and CHANGELOG.md for v0.0.1 (6c43f9c)
+
 # Changelog
 
 ## v0.0.1 (2026-06-02)
