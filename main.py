@@ -8,6 +8,7 @@ copy/paste pieces into your own app.
 
 from __future__ import annotations
 
+import hashlib
 import time
 import warnings
 from typing import Any
@@ -139,26 +140,55 @@ async def derive_key_ed25519(params: GetKeyParams) -> dict[str, Any]:
 # ---------------------------------------------------------------------------
 
 
+REPORT_DATA_TAG = "app-data"
+REPORT_DATA_DERIVATION = 'sha512("app-data:" || utf8(user_input))'
+
+
+def app_data_report_data(user_input: str) -> bytes:
+    hasher = hashlib.sha512()
+    hasher.update(REPORT_DATA_TAG.encode())
+    hasher.update(b":")
+    hasher.update(user_input.encode())
+    return hasher.digest()
+
+
 class ReportDataParams(BaseModel):
     report_data: str = Field(
-        ..., max_length=128, description="Up to 64 bytes (text or hex)"
+        ...,
+        max_length=4096,
+        description=(
+            "Caller input. Hashed as sha512('app-data:' || utf8(input)) before "
+            "it is used as TDX report_data, so it cannot collide with RA-TLS."
+        ),
     )
 
 
 @app.post("/attestation/quote", tags=["attestation"])
 async def attestation_quote(params: ReportDataParams) -> dict[str, Any]:
-    quote = await _client().get_quote(params.report_data)
+    report_data = app_data_report_data(params.report_data)
+    quote = await _client().get_quote(report_data)
     return {
         **quote.model_dump(),
         "rtmrs_replayed": quote.replay_rtmrs(),
+        "user_input": params.report_data,
+        "report_data_tag": REPORT_DATA_TAG,
+        "report_data_hex": report_data.hex(),
+        "report_data_derivation": REPORT_DATA_DERIVATION,
     }
 
 
 @app.post("/attestation/attest", tags=["attestation"])
 async def attestation_attest(params: ReportDataParams) -> dict[str, Any]:
     """Versioned attestation envelope (preferred for new verifiers)."""
-    result = await _client().attest(params.report_data)
-    return result.model_dump()
+    report_data = app_data_report_data(params.report_data)
+    result = await _client().attest(report_data)
+    return {
+        **result.model_dump(),
+        "user_input": params.report_data,
+        "report_data_tag": REPORT_DATA_TAG,
+        "report_data_hex": report_data.hex(),
+        "report_data_derivation": REPORT_DATA_DERIVATION,
+    }
 
 
 # ---------------------------------------------------------------------------
