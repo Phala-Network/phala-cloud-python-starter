@@ -2,7 +2,7 @@
 
 Every endpoint maps to one capability on the dstack guest-agent socket
 (/var/run/dstack.sock). The server itself is plain FastAPI; the goal is to
-show, in one file, the full surface of dstack-sdk 0.5.4 so you can
+show, in one file, the full surface of dstack-sdk 0.6.0 so you can
 copy/paste pieces into your own app.
 """
 
@@ -19,7 +19,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from dstack_sdk import AsyncDstackClient  # noqa: E402
+from dstack_sdk import AsyncDstackClientV0  # noqa: E402
 from dstack_sdk import EnvVar  # noqa: E402
 from dstack_sdk import encrypt_env_vars  # noqa: E402
 from dstack_sdk import get_compose_hash  # noqa: E402
@@ -32,7 +32,7 @@ from fastapi import HTTPException  # noqa: E402
 from pydantic import BaseModel  # noqa: E402
 from pydantic import Field  # noqa: E402
 
-SDK_VERSION = "0.5.4"
+SDK_VERSION = "0.6.0"
 app = FastAPI(
     title="Phala Cloud Python starter",
     description=(
@@ -43,9 +43,9 @@ app = FastAPI(
 )
 
 
-def _client() -> AsyncDstackClient:
+def _client() -> AsyncDstackClientV0:
     """Build a fresh client per request — the SDK is cheap to instantiate."""
-    return AsyncDstackClient()
+    return AsyncDstackClientV0()
 
 
 @app.get("/", summary="Index", tags=["meta"])
@@ -169,7 +169,6 @@ async def attestation_quote(params: ReportDataParams) -> dict[str, Any]:
     quote = await _client().get_quote(report_data)
     return {
         **quote.model_dump(),
-        "rtmrs_replayed": quote.replay_rtmrs(),
         "user_input": params.report_data,
         "report_data_tag": REPORT_DATA_TAG,
         "report_data_hex": report_data.hex(),
