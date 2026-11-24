@@ -10,7 +10,7 @@ FastAPI reference app that exercises every capability on `dstack-sdk` 0.6.0. Use
 |---|---|---|
 | Diagnostics | `GET /health`, `GET /version`, `GET /info` | `is_reachable()`, `version()`, `info()` (including `cloud_vendor` / `cloud_product` on 0.5.7+) |
 | Keys | `POST /keys/derive`, `POST /keys/derive/ed25519` | Deterministic secp256k1 and ed25519 derivation (the latter gated to dstack OS >= 0.5.7) |
-| Attestation | `POST /attestation/quote`, `POST /attestation/attest` | `get_quote()` (with RTMR replay) and the versioned `attest()` envelope. Caller input is hashed as `sha512("app-data:" \|\| utf8(input))` before it becomes TDX `report_data`; the response includes `user_input`, `report_data_hex`, and `report_data_derivation` so a verifier can recompute it. |
+| Attestation | `POST /attestation/quote`, `POST /attestation/attest` | `get_quote()` and `attest()` on `AsyncDstackClientV0`. Caller input is hashed as `sha512("app-data:" \|\| utf8(input))` before it becomes TDX `report_data`; the response includes `user_input`, `report_data_hex`, and `report_data_derivation` so a verifier can recompute it. |
 | TLS Keys | `POST /tls-key`, `POST /tls-key/with-app-info` | Legacy fields plus the 0.5.7-only `not_before` / `not_after` / `with_app_info` opts |
 | Sign / Verify | `POST /sign`, `POST /verify` | `sign()` + `verify()` |
 | Events | `POST /emit-event` | `emit_event()` — appends to RTMR3 |
@@ -32,23 +32,24 @@ python -m pip install -r requirements.txt
 cp env.example .env
 ```
 
-The SDK auto-discovers `/var/run/dstack.sock`. For local development without a CVM, run the dstack simulator and point `DSTACK_SIMULATOR_ENDPOINT` at it:
+The SDK auto-discovers `/var/run/dstack.sock`. This starter uses the frozen v0 guest API (`AsyncDstackClientV0`). There is no published `simulator-v*` GitHub release; build the simulator from source at tag `js-sdk-v0.6.0` of [dstack](https://github.com/Dstack-TEE/dstack). Its `dstack.sock` serves both v0 routes (`/GetKey`, `/Info`, …) and `/v1/…`.
+
+Prerequisites: Rust 1.92 and Cargo ([rustup](https://rustup.rs/)).
 
 ```shell
-# Linux
-wget https://github.com/Leechael/tappd-simulator/releases/download/v0.1.4/tappd-simulator-0.1.4-x86_64-linux-musl.tgz
-tar -xvf tappd-simulator-0.1.4-x86_64-linux-musl.tgz
-cd tappd-simulator-0.1.4-x86_64-linux-musl
-./tappd-simulator -l unix:/tmp/tappd.sock
-
-# macOS
-wget https://github.com/Leechael/tappd-simulator/releases/download/v0.1.4/tappd-simulator-0.1.4-aarch64-apple-darwin.tgz
-tar -xvf tappd-simulator-0.1.4-aarch64-apple-darwin.tgz
-cd tappd-simulator-0.1.4-aarch64-apple-darwin
-./tappd-simulator -l unix:/tmp/tappd.sock
+git clone --depth 1 --branch js-sdk-v0.6.0 https://github.com/Dstack-TEE/dstack.git
+cd dstack/sdk/simulator
+./build.sh
+./dstack-simulator
 ```
 
-`env.example` already sets `DSTACK_SIMULATOR_ENDPOINT=/tmp/tappd.sock` to match. Then in another terminal:
+Set the absolute path in `.env` (see `env.example`) or export it:
+
+```shell
+export DSTACK_SIMULATOR_ENDPOINT=/absolute/path/to/dstack/sdk/simulator/dstack.sock
+```
+
+Then in another terminal:
 
 ```shell
 source venv/bin/activate
