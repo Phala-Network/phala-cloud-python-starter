@@ -1,3 +1,8 @@
+## Unreleased
+
+- feat: add dstack guest API v1 routes under `/v1/` (info, version, key derivation, attest, TLS cert, Ethereum and Solana wallets) as the primary example; requires dstack OS >= 0.6.0
+- docs: label the existing v0 routes as legacy and document that v1 `get_key` derives different keys than v0
+
 ## v0.1.0 (2026-11-10)
 
 - Merge pull request #4 from Phala-Network/fix/hash-quote-report-data (f2d29ec)
